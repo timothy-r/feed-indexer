@@ -1,9 +1,10 @@
-service: token
+service: feedIndexer
 
 # use the stage from the cli if provided, otherwise fallback to the one in provider
 custom:
   stage: ${opt:stage, self:provider.stage}
   region: ${opt:region, self:provider.region}
+  domainName: ${opt:domain, self:provider.domain}
   indexName: ${self:service}_${self:custom.stage}_content
 
 # You can pin your service to only deploy with a specific Serverless version
@@ -12,12 +13,13 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   memorySize: 128
-  iamRoleStatements:
+  stackPolicy:
     - Effect: Allow
+      Principal: "ElasticSearch:*"
       Action:
-        - "elasticache:*"
+        - "*"
       Resource: "*"
 
   environment:
@@ -25,6 +27,7 @@ provider:
 
   stage: dev
   region: eu-west-2
+  domain: content
 
 package:
   exclude:
@@ -39,9 +42,8 @@ functions:
   indexer:
     handler: functions/indexer.handler
     events:
-      - http:
-          path: /tokens/{id}
-          method: put
+      - schedule : rate(1 minutes)
+
   filter:
     handler: functions/filter.handler
     events:
@@ -49,17 +51,9 @@ functions:
           path: /filter
           method: get
 
-
 resources:
   Resources:
-
-    tokenCache:
-      Type: AWS::ElastiCache::CacheCluster
+    feedIndex:
+      Type: AWS::Elasticsearch::Domain
       Properties:
-        Engine: redis
-        ClusterName: ${self:custom.cacheCluster}
-        CacheNodeType: cache.t2.micro
-        NumCacheNodes: 1
-        VpcSecurityGroupIds:
-          - ${self:custom.sg1}
-          - ${self:custom.sg2}
+        DomainName:
