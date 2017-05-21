@@ -1,0 +1,65 @@
+service: token
+
+# use the stage from the cli if provided, otherwise fallback to the one in provider
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+  indexName: ${self:service}_${self:custom.stage}_content
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  memorySize: 128
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "elasticache:*"
+      Resource: "*"
+
+  environment:
+    INDEX_NAME: ${self:custom.indexName}
+
+  stage: dev
+  region: eu-west-2
+
+package:
+  exclude:
+    - .idea/**
+    - .npmignore
+    - package.json
+    - node_modules/**
+    - tests/**
+    - README.md
+
+functions:
+  indexer:
+    handler: functions/indexer.handler
+    events:
+      - http:
+          path: /tokens/{id}
+          method: put
+  filter:
+    handler: functions/filter.handler
+    events:
+      - http:
+          path: /filter
+          method: get
+
+
+resources:
+  Resources:
+
+    tokenCache:
+      Type: AWS::ElastiCache::CacheCluster
+      Properties:
+        Engine: redis
+        ClusterName: ${self:custom.cacheCluster}
+        CacheNodeType: cache.t2.micro
+        NumCacheNodes: 1
+        VpcSecurityGroupIds:
+          - ${self:custom.sg1}
+          - ${self:custom.sg2}
