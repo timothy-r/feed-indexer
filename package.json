@@ -1,5 +1,5 @@
 {
-  "name": "FeedIndexer",
+  "name": "FeedIndexerDev",
   "version": "1.0.0",
   "description": "Indexes feed data into elasticSearch",
   "author": "Tim Rodger",

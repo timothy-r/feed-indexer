@@ -1,0 +1,13 @@
+{
+  "name": "FeedIndexerProd",
+  "version": "1.0.0",
+  "description": "Indexes feed data into elasticSearch",
+  "author": "Tim Rodger",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "async": "^2.0.0",
+    "feedparser": "^2.2.0",
+    "request": "^2.81.0"
+  }
+}

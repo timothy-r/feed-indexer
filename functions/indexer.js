@@ -1,7 +1,9 @@
 'use strict';
 
+//var FeedIndexer = require('./feed-indexer');
+
 /**
- * Call indexers per feed url to update the feed index
+ * Call indexers async per feed url to update the feed index
  *
  * @param event
  * @param context
@@ -10,5 +12,6 @@
 module.exports.handler = (event, context, callback) => {
 
     console.log(event);
+
     callback();
 };
