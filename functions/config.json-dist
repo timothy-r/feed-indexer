@@ -1,6 +1,10 @@
 [
   {
-    "name": "name of feed",
-    "url": "feed url"
+    "name" : "name of feed",
+    "url" : "feed url",
+    "index" : "my feed index",
+    "indexInput" : {
+        "type" : "my-index-type"
+    }
   }
 ]

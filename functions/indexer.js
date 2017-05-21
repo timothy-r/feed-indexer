@@ -1,5 +1,7 @@
 'use strict';
 
+var config = require('./config.json');
+
 //var FeedIndexer = require('./feed-indexer');
 
 /**
