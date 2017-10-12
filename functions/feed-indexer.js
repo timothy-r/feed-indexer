@@ -9,7 +9,7 @@ var request = require('request');
 var keys = ['guid', 'title', 'description', 'date', 'pubdate', 'link', 'author', 'categories'];
 
 // parameterise the feed url
-var url = 'http://myfeed.com/';
+var url = 'http://www.flatfishflesh.net/feed'; //'http://myfeed.com/';
 
 var req = request(url);
 
