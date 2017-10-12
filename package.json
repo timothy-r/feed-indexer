@@ -10,6 +10,7 @@
     "aws-sdk": "^2.4.7",
     "feedparser": "^2.2.2",
     "mocha": "^2.5.3",
+    "request": "^2.83.0",
     "serverless-optimizer-plugin": "^2.5.1",
     "supertest": "^1.2.0"
   },
